@@ -62,3 +62,6 @@ Parts of a token :
        
  <b>website References</b>  : jsonwebtoken  /  jwt.io
 
+## MIDDLEWARE :
+
+Middleware in React is a third-party extension point between dispatching an action and handing the action off to the reducer. It allows for side effects to be run without blocking state updates. Side effects like API requests can be run in response to a specific action or in response to every action that is dispatched. There can be numerous middleware that an action runs through before ending in a reducer.

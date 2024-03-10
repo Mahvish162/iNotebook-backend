@@ -6,12 +6,12 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt=require('bcryptjs');   // bcrypt is used for storing the simple plain text password in hashed form in Nodejs
 var jwt = require('jsonwebtoken');
-
+var fetchuser=require('../middleware/fetchuser');
 const JWT_SECRET ='Mahvishisagoodg$irl';
 
 
 
-// Create a user using POST "/api/auth/createuser",No login required.
+//Route 1: Create a user using POST "/api/auth/createuser",No login required.
 router.post('/createuser', [
   body('name', 'Enter a valid name').isLength({ min: 3 }),
   body('email', "Enter a valid Email").isEmail(),
@@ -55,7 +55,7 @@ router.post('/createuser', [
 });
 
 
-//Authenticate a user using : POST'/api/auth/createuser",NO login required.
+//Route 2: Authenticate a user using : POST'/api/auth/createuser",NO login required.
 
 router.post('/login', [
   body('email', "Enter a valid Email").isEmail(),
@@ -97,7 +97,22 @@ router.post('/login', [
 })
 
 
-module.exports = router;
+//Route 3:Get logged in user details using POST "/api/auth/getuser", login required.
 
 
+router.post('/getuser',fetchuser,async (req, res) => {
+     
+  
+  try {
+          const userId=req.user.id;
+          const user=await User.findById(userId).select("-password");
+          res.send(user)
+      }      
+      
+   catch (error) {       
+        res.status(401).json({ error: 'here i got Server error' });
+      }
+})
 
+
+module.exports = router
