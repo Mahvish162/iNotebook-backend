@@ -32,7 +32,7 @@ router.post('/createuser', [
     });
     const data={
       user:{
-        id:user.id   // here we use id bcoz data of users have id. so we use any of then makes the same sense.
+        id:user.id   // here we use id bcoz data of users have id. so we use any of that makes the same sense.
       }
     }
     const authToken= jwt.sign(data,JWT_SECRET);      // uses the signature method of jwt.io and this returns a promise.
@@ -53,6 +53,50 @@ router.post('/createuser', [
     res.status(500).json({ error: 'here i got Server error' });
   }
 });
+
+
+//Authenticate a user using : POST'/api/auth/createuser",NO login required.
+
+router.post('/login', [
+  body('email', "Enter a valid Email").isEmail(),
+  body('password', "password can't be empty").exists(),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const{email,password}=req.body;   // destructuring
+  try{
+    let user=await User.findOne({email});  //pulling email from database
+
+      if(!user){                        // if user not exists then ....
+        return res.status(400).json({error: "pls try to login with correct credentials"});
+      }
+      const passwordcompare=await bcrypt.compare(password,user.password);     // comparing/matching the user entered password with pulled password by its own side....
+      if(!passwordcompare){
+        return res.status(400).json({error: "pls try to login with correct credentials"});
+      }
+      const data={
+        user:{
+          id:user.id 
+        }
+      }
+      const authToken= jwt.sign(data,JWT_SECRET);
+        
+         res.json('authToken :' + authToken)  
+   
+  }catch(error){
+   
+    if (error.code === 11000) {
+      // Duplicate key error
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+    console.error(error);
+    res.status(500).json({ error: 'here i got Server error' });
+  }
+})
+
+
 module.exports = router;
 
 
