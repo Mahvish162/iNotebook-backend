@@ -32,3 +32,32 @@ The React Context API is a powerful tool for efficient state management, offerin
  1. Creating a context with the help of react using the particular syntax, as mentioned in the noteContext.js directory.For more detailed explanation of this step refer the particular directory.
 
  2. Now we can leverage the above context in any of the components state,we create state for that so that state can be accessible to everyone very easily, as done in NoteState.js directory,For more detailed explanation of this step refer the particular directory.
+
+>> MAP function in react js
+
+Consider this example & then understand the concept more better , In Sha Allah....
+
+const users = [
+  {
+    name: "Jesse",
+    age: 21,
+    height: "1.90cm"
+  },
+  {
+    name: "Tom",
+    age: 25,
+    height: "1.67cm"
+  },
+  {
+    name: "Anna",
+    age: 34,
+    height: "1.59cm"
+  }
+]
+
+const userNames = users.map(({ name }) => name)
+// ['Jesse', 'Tom', 'Anna']
+
+As you can see we have an array users. Each user is represented by an object. Each object has 3 properties, those are: name, age and height. The goal here is to get an array of of users’ names and store it as an array.
+
+The simplest way to carry out this operation is by using the map function. We’re calling map on the array users, using the destructuring assignment to reach into each of the user objects and select the name of that particular user. The callback functions returns the name, which gets written into the new array. And just like that we have an array of users’ names ready to use.
